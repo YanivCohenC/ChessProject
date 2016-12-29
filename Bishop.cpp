@@ -76,16 +76,21 @@ bool Bishop::squareCheck(Pieces* arr[][8], string dst)
 bool Bishop::upLeft(Pieces* arr[8][8], string dst, int startX, int startY, int dstX, int dstY)
 {
 	bool ans = false;
+	string dstLoc = string() + dst[2] + dst[3];
 
-	for (int i = startX, j = startY; i > dstX && j > dstY; i--, j--)
+	for (int i = startX, j = startY; i >= dstX && j >= dstY; i--, j--)
 	{
-		if (arr[i][j]->getTaken())
+		if (arr[i][j]->getTaken() && this != arr[i][j])
 		{
-			if (arr[i][j]->getSide()[0] == dst[4] && this->getLocation() != arr[i][j]->getLocation() && arr[i][j]->getSide()[0] != 'n' || arr[i][j]->getSide()[0] != dst[4])
+			if (i != dstX && j != dstY && arr[i][j]->getSide()[0] != 'n')
 			{
 				ans = true;
 				break;
 			}
+		}
+		if ((i == dstX || j == dstY) && dstLoc.compare(arr[i][j]->getLocation()))
+		{
+			ans = true;
 		}
 	}
 	return ans;
@@ -96,18 +101,22 @@ bool Bishop::upLeft(Pieces* arr[8][8], string dst, int startX, int startY, int d
 bool Bishop::upRight(Pieces* arr[8][8], string dst, int startX, int startY, int dstX, int dstY)
 {
 	bool ans = false;
+	string dstLoc = string() + dst[2] + dst[3];
 
-	for (int i = startX, j = startY; i > dstX && j < dstY; i--, j++)
+	for (int i = startX, j = startY; i >= dstX && j <= dstY; i--, j++)
 	{
 		if (arr[i][j]->getTaken() && this != arr[i][j])
 		{
-			if (arr[i][j]->getSide()[0] == dst[4] && this->getSide() != arr[i][j]->getSide() && arr[i][j]->getSide()[0] != 'n' || arr[i][j]->getSide()[0] != dst[4])
+			if (i != dstX && j != dstY && arr[i][j]->getSide()[0] != 'n')
 			{
 				ans = true;
 				break;
 			}
 		}
-
+		if ((i == dstX || j == dstY) && dstLoc.compare(arr[i][j]->getLocation()))
+		{
+			ans = true;
+		}
 	}
 	return ans;
 }
@@ -117,18 +126,22 @@ bool Bishop::upRight(Pieces* arr[8][8], string dst, int startX, int startY, int 
 bool Bishop::downLeft(Pieces* arr[8][8], string dst, int startX, int startY, int dstX, int dstY)
 {
 	bool ans = false;
+	string dstLoc = string() + dst[2] + dst[3];
 
-	for (int i = startX, j = startY; i < dstX && j > dstY; i++, j--)
+	for (int i = startX, j = startY; i <= dstX && j >= dstY; i++, j--)
 	{
-		if (arr[i][j]->getTaken())
+		if (arr[i][j]->getTaken() && this != arr[i][j])
 		{
-			if (arr[i][j]->getSide()[0] == dst[4] && this->getLocation() != arr[i][j]->getLocation() && arr[i][j]->getSide()[0] != 'n' || arr[i][j]->getSide()[0] != dst[4])
+			if (i != dstX && j != dstY && arr[i][j]->getSide()[0] != 'n')
 			{
 				ans = true;
 				break;
 			}
 		}
-
+		if ((i == dstX || j == dstY) && dstLoc.compare(arr[i][j]->getLocation()))
+		{
+			ans = true;
+		}
 	}
 	return ans;
 }
@@ -138,16 +151,21 @@ bool Bishop::downLeft(Pieces* arr[8][8], string dst, int startX, int startY, int
 bool Bishop::downRight(Pieces* arr[8][8], string dst, int startX, int startY, int dstX, int dstY)
 {
 	bool ans = false;
+	string dstLoc = string() + dst[2] + dst[3];
 
-	for (int i = startX, j = startY; i < dstX && j < dstY; i++, j++)
+	for (int i = startX, j = startY; i <= dstX && j <= dstY; i++, j++)
 	{
 		if (arr[i][j]->getTaken() && this != arr[i][j])
 		{
-			if (arr[i][j]->getSide()[0] == dst[4] && this->getSide() != arr[i][j]->getSide() && arr[i][j]->getSide()[0] != 'n' || arr[i][j]->getSide()[0] != dst[4])
+			if (i != dstX && j != dstY && arr[i][j]->getSide()[0] != 'n')
 			{
 				ans = true;
 				break;
 			}
+		}
+		if ((i == dstX || j == dstY) && dstLoc.compare(arr[i][j]->getLocation()))
+		{
+			ans = true;
 		}
 	}
 	return ans;
