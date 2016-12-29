@@ -52,12 +52,12 @@ bool Rook::squareCheck(Pieces* arr[][8], string dst)
 		ans = down(arr, dst, x1, x2, y1);
 	}
 	//move left
-	else if (dst[0] < dst[2] && dst[1] == dst[3])
+	else if (dst[0] > dst[2] && dst[1] == dst[3])
 	{
 		ans = left(arr, dst, y1, y2, x1);
 	}
 	//move right
-	else if (dst[0] > dst[2] && dst[1] == dst[3])
+	else if (dst[0] < dst[2] && dst[1] == dst[3])
 	{
 		ans = right(arr, dst, y1, y2, x1);
 	}
@@ -76,11 +76,11 @@ bool  Rook::left(Pieces* arr[8][8], string dst, int startY, int dstY, int X)
 	bool ans = false;
 	string dstLoc = string() + dst[2] + dst[3];
 
-	for (int i = startY; i <= dstY; i--)
+	for (int i = startY; i >= dstY; i--)
 	{
 		if (arr[X][i]->getTaken() && this != arr[X][i])
 		{
-			if (i == dstY && arr[X][i]->getSide()[0] != 'n')
+			if (i != dstY && arr[X][i]->getSide()[0] != 'n')
 			{
 				ans = true;
 				break;
@@ -106,7 +106,7 @@ bool  Rook::right(Pieces* arr[8][8], string dst, int startY, int dstY, int X)
 	{
 		if (arr[X][i]->getTaken() && this != arr[X][i])
 		{
-			if (i == dstY && arr[X][i]->getSide()[0] != 'n')
+			if (i != dstY && arr[X][i]->getSide()[0] != 'n')
 			{
 				ans = true;
 				break;
@@ -128,11 +128,11 @@ bool  Rook::up(Pieces* arr[8][8], string dst, int startX, int dstX, int Y)
 	bool ans = false;
 	string dstLoc = string() + dst[2] + dst[3];
 
-	for (int i = startX; i <= dstX; i--)
+	for (int i = startX; i >= dstX; i--)
 	{
 		if (arr[i][Y]->getTaken() && this != arr[i][Y])
 		{
-			if (i == dstX && arr[i][Y]->getSide()[0] != 'n')
+			if (i != dstX && arr[i][Y]->getSide()[0] != 'n')
 			{
 				ans = true;
 				break;
@@ -157,7 +157,7 @@ bool  Rook::down(Pieces* arr[8][8], string dst, int startX, int dstX, int Y)
 	{
 		if (arr[i][Y]->getTaken() && this != arr[i][Y])
 		{
-			if (i == dstX && arr[i][Y]->getSide()[0] != 'n')
+			if (i != dstX && arr[i][Y]->getSide()[0] != 'n')
 			{
 				ans = true;
 				break;
