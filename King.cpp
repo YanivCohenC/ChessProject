@@ -12,14 +12,14 @@ char King::move(Pieces* arr[8][8], string dst)
 	{
 		ans = '2';
 	}
-	else if (arr[int('8' - dst[3])][int(dst[2] - 'a')]->getTaken() && this != arr[int('8' - dst[3])][int(dst[2] - 'a')] && _side[0] == arr[int('8' - dst[3])][int(dst[2] - 'a')]->getSide()[0])
+	else if (arr[int('8' - dst[3])][int(dst[2] - 'a')]->getTaken() && this != arr[int('8' - dst[3])][int(dst[2] - 'a')])
 	{
 		ans = '3';
 	}
-	//else if (check(arr, dst))
-	//{
-	//	ans = '4';
-	//}
+	/*else if (check(arr, dst))
+	{
+		ans = '4';
+	}*/
 	else if ((dst[1] > '8' || dst[1] < '0') || (dst[3] > '8' || dst[3] < '0') || (dst[0] > 'h' || dst[0] < 'a') || (dst[2] > 'h' || dst[2] < 'a'))
 	{
 		ans = '5';
@@ -36,126 +36,8 @@ char King::move(Pieces* arr[8][8], string dst)
 }
 
 
-bool King::check(Pieces* arr[8][8], string dst)
-{
-	bool ans = true;
-	string side = { dst[4] };
-	string loc = { dst[0], dst[1] };
-	string dst1 = { dst[2], dst[1], dst[2], '1', dst[4] };
-	ans = this->checkUDLR(arr, dst1);
-	if (!ans)
-	{
-		dst1 = { dst[2], dst[1], dst[2], '8', dst[4] };
-		ans = this->checkUDLR(arr, dst1);
-		if (!ans)
-		{
-			dst1 = { dst[0], dst[3], 'h', dst[3], dst[4] };
-			ans = this->checkUDLR(arr, dst1);
-			if (!ans)
-			{
-				dst1 = { dst[0], dst[3], 'a', dst[3], dst[4] };
-				ans = this->checkUDLR(arr, dst1);
-				if (!ans)
-				{
-					ans = false;
-				}
-			}
-		}
-	}
-	return ans;
-}
-
-bool King::checkUDLR(Pieces* arr[8][8], string dst)
-{
-	bool ans = false;
-	int x1 = int(dst[1] - '0'), x2 = int(dst[3] - '1'), y1 = int(dst[0] - 'a'), y2 = int(dst[2] - 'a');
-	if (dst[0] == dst[2])
-	{
-		if (dst[1] < dst[3])
-		{
-			for (int i = 0; i<x2; i++)
-			{
-				if (arr[i][y1]->getSide()[0] == dst[4] && this != arr[i][y1])
-				{
-					break;
-				}
-				else if (arr[i][y1]->getTaken() && this != arr[i][y1])
-				{
-					if (this != arr[i][y1] && arr[i][y1]->getSide()[0] != 'n' && arr[i][y1]->getSide()[0] != dst[4])
-					{
-						ans = true;
-						break;
-					}
-				}
-			}
-		}
-		else
-		{
-			for (int i = 8 - x1; i < 8; i++)
-			{
-				if (arr[i][y1]->getSide()[0] == dst[4] && this != arr[i][y1])
-				{
-					break;
-				}
-				else if (arr[i][y1]->getTaken())
-				{
-					if (this != arr[i][y1] && arr[i][y1]->getSide()[0] != 'n' && arr[i][y1]->getSide()[0] != dst[4])
-					{
-						ans = true;
-						break;
-					}
-				}
-			}
-		}
-	}
-	else if (dst[1] == dst[3])
-	{
-		if (dst[0] < dst[2])
-		{
-			for (int j = y1; j<y2+1; j++)
-			{
-				if (arr[8 - x1][j]->getTaken())
-				{
-					if (arr[8 - x1][j]->getSide()[0] == dst[4] && this != arr[8 - x1][j])
-					{
-						break;
-					}
-					else if (arr[8 - x1][j]->getSide()[0] != dst[4] && arr[8 - x1][j]->getSide()[0] != 'n')
-					{
-						ans = true;
-						break;
-					}
-				}
-			}
-		}
-		else
-		{
-			for (int j = y1; j>=0; j--)
-			{
-				if (arr[8 - x1][j]->getTaken())
-				{
-					if (arr[8 - x1][j]->getSide()[0] == dst[4] && this != arr[8 - x1][j])
-					{
-						break;
-					}
-					else if (arr[8 - x1][j]->getSide()[0] != dst[4] && arr[8 - x1][j]->getSide()[0] != 'n')
-					{
-						ans = true;
-						break;
-					}
-				}
-			}
-		}
-	}
-	else
-	{
-		ans = true;
-	}
-	return ans;
-}
-
 /*
-
+The movement of the king
 */
 bool King::squareCheck(Pieces* arr[8][8], string dst)
 {
@@ -202,3 +84,232 @@ bool King::squareCheck(Pieces* arr[8][8], string dst)
 	return ans;
 }
 
+
+bool King::check(Pieces* arr[8][8], string dst)
+{
+	bool ans = false;
+	if (rookCheck(arr, dst) || bishopCheck(arr, dst) || knightCheck(arr, dst))
+	{
+		ans = true;
+	}
+	return ans;
+}
+
+
+bool King::rookCheck(Pieces* arr[8][8], string dst)
+{
+	bool ans = false;
+	int x = int('8' - dst[3]), y = int(dst[2] - 'a');
+	if (left(arr, dst, y, 0, x) || right(arr, dst, y, 8, x) || up(arr, dst, x, 0, y) || down(arr, dst, x, 8, y))
+	{
+		ans = true;
+	}
+	return ans;
+}
+
+
+bool King::bishopCheck(Pieces* arr[8][8], string dst)
+{
+	int x = int('8' - dst[3]), y = int(dst[2] - 'a');
+	bool ans = false;
+	if (upLeft(arr, dst, x, y, 0) || upRight(arr, dst, x, y, 8) || downLeft(arr, dst, x, y, 0) || downRight(arr, dst, x, y, 8))
+	{
+		ans = true;
+	}
+	return ans;
+}
+
+
+bool King::knightCheck(Pieces* arr[8][8], string dst)
+{
+	bool ans = false;
+}
+
+
+
+bool King::upLeft(Pieces* arr[8][8], string dst, int startX, int startY, int dstY)
+{
+	bool ans = false;
+	string dstLoc = string() + dst[2] + dst[3];
+
+	for (int i = startX - 1, j = startY - 1; j >= dstY; i--, j--)
+	{
+		if (arr[i][j]->getTaken() && this != arr[i][j])
+		{
+			if ( j != dstY && arr[i][j]->getSide()[0] != 'n' && arr[i][j]->getSide()[0] != dst[4])
+			{
+				if (arr[i][j]->getType()[0] == 'b' || arr[i][j]->getType()[0] == 'q' || (arr[i][j]->getType()[0] == 'p' && arr[i][j]->getSide()[0] == 'W') || arr[i][j]->getType()[0] == 'k')
+				{
+					ans = true;
+					break;
+				}
+			}
+		}
+	}
+	return ans;
+}
+
+
+bool King::upRight(Pieces* arr[8][8], string dst, int startX, int startY, int dstY)
+{
+	bool ans = false;
+	string dstLoc = string() + dst[2] + dst[3];
+
+	for (int i = startX - 1, j = startY + 1; j <= dstY; i--, j++)
+	{
+		if (arr[i][j]->getTaken() && this != arr[i][j])
+		{
+			if (j != dstY && arr[i][j]->getSide()[0] != 'n')
+			{
+				if (arr[i][j]->getType()[0] == 'b' || arr[i][j]->getType()[0] == 'q' || (arr[i][j]->getType()[0] == 'p' && arr[i][j]->getSide()[0] == 'W') || arr[i][j]->getType()[0] == 'k')
+				{
+					ans = true;
+					break;
+				}
+			}
+		}
+	}
+	return ans;
+}
+
+
+bool King::downLeft(Pieces* arr[8][8], string dst, int startX, int startY, int dstY)
+{
+	bool ans = false;
+	string dstLoc = string() + dst[2] + dst[3];
+
+	for (int i = startX + 1, j = startY - 1;j >= dstY; i++, j--)
+	{
+		if (arr[i][j]->getTaken() && this != arr[i][j])
+		{
+			if (j != dstY && arr[i][j]->getSide()[0] != 'n')
+			{
+				if (arr[i][j]->getType()[0] == 'b' || arr[i][j]->getType()[0] == 'q' || (arr[i][j]->getType()[0] == 'p' && arr[i][j]->getSide()[0] == 'B') || arr[i][j]->getType()[0] == 'k')
+				{
+					ans = true;
+					break;
+				}
+			}
+		}
+	}
+	return ans;
+}
+
+
+bool King::downRight(Pieces* arr[8][8], string dst, int startX, int startY, int dstY)
+{
+	bool ans = false;
+	string dstLoc = string() + dst[2] + dst[3];
+
+	for (int i = startX + 1, j = startY + 1;j <= dstY; i++, j++)
+	{
+		if (arr[i][j]->getTaken() && this != arr[i][j])
+		{
+			if (j != dstY && arr[i][j]->getSide()[0] != 'n')
+			{
+				if (arr[i][j]->getType()[0] == 'b' || arr[i][j]->getType()[0] == 'q' || (arr[i][j]->getType()[0] == 'p' && arr[i][j]->getSide()[0] == 'B') || arr[i][j]->getType()[0] == 'k')
+				{
+					ans = true;
+					break;
+				}
+			}
+		}
+	}
+	return ans;
+}
+
+
+
+
+bool King::left(Pieces* arr[8][8], string dst, int startY, int dstY, int X)
+{
+	bool ans = false;
+	string dstLoc = string() + dst[2] + dst[3];
+
+	for (int i = startY - 1; i >= dstY; i--)
+	{
+		if (arr[X][i]->getTaken() && this != arr[X][i])
+		{
+			if (i != dstY && arr[X][i]->getSide()[0] != 'n')
+			{
+				if (arr[X][i]->getType()[0] == 'r' || arr[X][i]->getType()[0] == 'q' || arr[X][i]->getType()[0] == 'k')
+				{
+					ans = true;
+					break;
+				}
+			}
+		}
+	}
+
+	return ans;
+}
+
+
+bool King::right(Pieces* arr[8][8], string dst, int startY, int dstY, int X)
+{
+	bool ans = false;
+	string dstLoc = string() + dst[2] + dst[3];
+
+	for (int i = startY + 1; i <= dstY; i++)
+	{
+		if (arr[X][i]->getTaken() && this != arr[X][i])
+		{
+			if (i != dstY && arr[X][i]->getSide()[0] != 'n')
+			{
+				if (arr[X][i]->getType()[0] == 'r' || arr[X][i]->getType()[0] == 'q' || arr[X][i]->getType()[0] == 'k')
+				{
+					ans = true;
+					break;
+				}
+			}
+		}
+	}
+
+	return ans;
+}
+
+
+bool King::up(Pieces* arr[8][8], string dst, int startX, int dstX, int Y)
+{
+	bool ans = false;
+	string dstLoc = string() + dst[2] + dst[3];
+
+	for (int i = startX - 1; i >= dstX; i--)
+	{
+		if (arr[i][Y]->getTaken() && this != arr[i][Y])
+		{
+			if (i != dstX && arr[i][Y]->getSide()[0] != 'n')
+			{
+				if (arr[i][Y]->getType()[0] == 'r' || arr[i][Y]->getType()[0] == 'q' || arr[i][Y]->getType()[0] == 'k')
+				{
+					ans = true;
+					break;
+				}
+			}
+		}
+	}
+	return ans;
+}
+
+
+bool  King::down(Pieces* arr[8][8], string dst, int startX, int dstX, int Y)
+{
+	bool ans = false;
+	string dstLoc = string() + dst[2] + dst[3];
+
+	for (int i = startX + 1; i <= dstX; i++)
+	{
+		if (arr[i][Y]->getTaken() && this != arr[i][Y])
+		{
+			if (i != dstX && arr[i][Y]->getSide()[0] != 'n')
+			{
+				if (arr[i][Y]->getType()[0] == 'r' || arr[i][Y]->getType()[0] == 'q' || arr[i][Y]->getType()[0] == 'k')
+				{
+					ans = true;
+					break;
+				}
+			}
+		}
+	}
+	return ans;
+}
