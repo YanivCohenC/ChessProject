@@ -3,6 +3,7 @@
 #include "Pieces.h"
 #include "King.h"
 #include "Empty.h"
+#include "Queen.h"
 #include "Rook.h"
 #include "Knight.h"
 #include "Pawn.h"
@@ -16,7 +17,7 @@ void main()
 
 	Pipe p;
 	bool isConnect = p.connect();
-	
+
 	string ans;
 	while (!isConnect)
 	{
@@ -30,18 +31,18 @@ void main()
 			Sleep(5000);
 			isConnect = p.connect();
 		}
-		else 
+		else
 		{
 			p.close();
 			return;
 		}
 	}
-	
+
 
 	char msgToGraphics[1024];
 	// msgToGraphics should contain the board string accord the protocol
 	// YOUR CODE
-	char board[] = "rnbk#bnrpppppppp################################PPPPPPPPRNBK#BNR0";
+	char board[] = "rnbkqbnrpppppppp################################PPPPPPPPRNBKQBNR0";
 	Pieces* arr[8][8];
 	Pieces* Bking;
 	Pieces* Wking;
@@ -52,7 +53,7 @@ void main()
 		{
 			char chi = '8' - i;
 			char chj = j + 'a';
-			string s = { chj,chi };
+			string s = { chj, chi };
 			switch (board[x])
 			{
 			case 'r':
@@ -69,7 +70,7 @@ void main()
 				Bking = arr[i][j];
 				break;
 			case 'q':
-				//code
+				arr[i][j] = new Queen(true, s, "queen", "Black");
 				break;
 			case 'p':
 				arr[i][j] = new Pawn(true, s, "pawn", "Black");
@@ -89,7 +90,7 @@ void main()
 				//Wking = arr[i][j];
 				break;
 			case 'Q':
-				//code
+				arr[i][j] = new Queen(true, s, "queen", "White");
 				break;
 			case 'P':
 				arr[i][j] = new Pawn(true, s, "pawn", "White");
@@ -101,11 +102,11 @@ void main()
 			}
 			x++;
 		}
-		
+
 	}
-	
+
 	strcpy_s(msgToGraphics, board); // just example...
-	
+
 	p.sendMessageToGraphics(msgToGraphics);   // send the board string
 
 	// get message from graphics
@@ -114,7 +115,7 @@ void main()
 	while (msgFromGraphics != "quit")
 	{
 		string str;
-		
+
 		if (count % 2 == 0)
 		{
 			str = 'W';
@@ -127,7 +128,7 @@ void main()
 		// according the protocol. Ex: e2e4           (move e2 to e4)
 		int x = int(msgFromGraphics[0] - 'a');
 		int x1 = int('8' - msgFromGraphics[1]);
-		board[0] = arr[x1][x]->move(arr, msgFromGraphics+str);
+		board[0] = arr[x1][x]->move(arr, msgFromGraphics + str);
 		//while (1)
 		//{
 		//	Pieces* temp;
@@ -155,11 +156,11 @@ void main()
 		//	arr[x1][x]->setLocation(strL);
 		//	break;
 		//}
-		strcpy_s(msgToGraphics ,board); // msgToGraphics should contain the result of the operation
-	
+		strcpy_s(msgToGraphics, board); // msgToGraphics should contain the result of the operation
+
 		msgToGraphics[1] = 0;
-		
-		
+
+
 		if (msgToGraphics[0] == '0' || msgToGraphics[0] == '1')
 		{
 			count++;
@@ -179,11 +180,11 @@ void main()
 			arr[y1][y]->setLocation(strL);
 		}
 		// return result to graphics		
-		p.sendMessageToGraphics(msgToGraphics);   
-		
+		p.sendMessageToGraphics(msgToGraphics);
+
 		// get message from graphics
 		msgFromGraphics = p.getMessageFromGraphics();
-		
+
 	}
 
 	p.close();

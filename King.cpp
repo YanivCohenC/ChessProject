@@ -16,10 +16,10 @@ char King::move(Pieces* arr[8][8], string dst)
 	{
 		ans = '3';
 	}
-	/*else if (check(arr, dst))
+	else if (check(arr, dst))
 	{
 		ans = '4';
-	}*/
+	}
 	else if ((dst[1] > '8' || dst[1] < '0') || (dst[3] > '8' || dst[3] < '0') || (dst[0] > 'h' || dst[0] < 'a') || (dst[2] > 'h' || dst[2] < 'a'))
 	{
 		ans = '5';
@@ -123,6 +123,7 @@ bool King::bishopCheck(Pieces* arr[8][8], string dst)
 bool King::knightCheck(Pieces* arr[8][8], string dst)
 {
 	bool ans = false;
+	return ans;
 }
 
 
