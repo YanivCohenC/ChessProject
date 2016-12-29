@@ -40,23 +40,33 @@ bool Pawn::squareCheck(Pieces* arr[][8], string dst)
 {
 	bool ans = false;
 	int y1 = int(dst[1] - '0'), y2 = int(dst[3] - '0'), x1 = int(dst[0] - 'a') + 1, x2 = int(dst[2] - 'a') + 1;
-
-	if ((x1 == x2 - 1 && y1 == y2 - 2)/* < UP RIGHT */ || (x1 == x2 + 1 && y1 == y2 - 2)/* < UP LEFT */)
+	
+	if (_side[0] == 'W' && y1 == 2 && y2 == y1 + 2 && x1 == x2) // White pawn special move up
 	{
 		return ans;
 	}
 
-	if ((x1 == x2 - 2 && y1 == y2 - 1)/* < RIGHT UP */ || (x1 == x2 - 2 && y1 == y2 + 1)/* < RIGHT DOWN */)
+	if (_side[0] == 'B' && y1 == 7 && y2 == y1 - 2 && x1 == x2) // Black pawn special move down
 	{
 		return ans;
 	}
 
-	if ((x1 == x2 - 1 && y1 == y2 + 2)/* < DOWN RIGHT */ || (x1 == x2 + 1 && y1 == y2 + 2)/* < DOWN LEFT */)
+	if (_side[0] == 'W' && x1 == x2 && y1 == y2 - 1 && !(arr[int('8' - dst[3])][int(dst[2] - 'a')]->getTaken())) // White move one up and its free
 	{
 		return ans;
 	}
 
-	if ((x1 == x2 + 2 && y1 == y2 - 1)/* < LEFT UP */ || (x1 == x2 + 2 && y1 == y2 + 1)/* < LEFT DOWN */)
+	if (_side[0] == 'B' && x1 == x2 && y1 == y2 + 1 && !(arr[int('8' - dst[3])][int(dst[2] - 'a')]->getTaken())) // Black move one down and its free
+	{
+		return ans;
+	}
+
+	if ((_side[0] == 'W' && x1 == x2 + 1 && y1 == y2 - 1) /* UP LEFT */ && (arr[int('8' - dst[3])][int(dst[2] - 'a')]->getTaken()) || (_side[0] == 'W' && x1 == x2 - 1 && y1 == y2 - 1) /* UP RIGHT */ && (arr[int('8' - dst[3])][int(dst[2] - 'a')]->getTaken())) // White eating
+	{
+		return ans;
+	}
+	
+	if ((_side[0] == 'B' && x1 == x2 + 1 && y1 == y2 + 1) /* DOWN LEFT */ && (arr[int('8' - dst[3])][int(dst[2] - 'a')]->getTaken()) || (_side[0] == 'B' && x1 == x2 - 1 && y1 == y2 + 1) /* DOWN RIGHT */ && (arr[int('8' - dst[3])][int(dst[2] - 'a')]->getTaken())) // Black eating
 	{
 		return ans;
 	}

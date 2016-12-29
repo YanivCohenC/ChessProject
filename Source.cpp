@@ -5,6 +5,8 @@
 #include "Empty.h"
 #include "Rook.h"
 #include "Knight.h"
+#include "Pawn.h"
+#include "Bishop.h"
 #include <thread>
 
 using namespace std;
@@ -39,7 +41,7 @@ void main()
 	char msgToGraphics[1024];
 	// msgToGraphics should contain the board string accord the protocol
 	// YOUR CODE
-	char board[] = "rn#k##nr################################################RN#K##NR1";
+	char board[] = "rnbk#bnrpppppppp################################PPPPPPPPRNBK#BNR0";
 	Pieces* arr[8][8];
 	Pieces* Bking;
 	Pieces* Wking;
@@ -60,7 +62,7 @@ void main()
 				arr[i][j] = new Knight(true, s, "knight", "Black");
 				break;
 			case 'b':
-				//code
+				arr[i][j] = new Bishop(true, s, "bishop", "Black");
 				break;
 			case 'k':
 				arr[i][j] = new King(true, s, "king", "Black");
@@ -70,7 +72,7 @@ void main()
 				//code
 				break;
 			case 'p':
-				//code
+				arr[i][j] = new Pawn(true, s, "pawn", "Black");
 				break;
 
 			case 'R':
@@ -80,20 +82,20 @@ void main()
 				arr[i][j] = new Knight(true, s, "knight", "White");
 				break;
 			case 'B':
-				//code
+				arr[i][j] = new Bishop(true, s, "bishop", "White");
 				break;
 			case 'K':
-				arr[i][j] = new King(true, s, "King", "White");
+				arr[i][j] = new King(true, s, "king", "White");
 				//Wking = arr[i][j];
 				break;
 			case 'Q':
 				//code
 				break;
 			case 'P':
-				//code
+				arr[i][j] = new Pawn(true, s, "pawn", "White");
 				break;
 			case '#':
-				arr[i][j] = new Empty(false, s, "Empty", "no");
+				arr[i][j] = new Empty(false, s, "empty", "no");
 
 				break;
 			}
@@ -115,11 +117,11 @@ void main()
 		
 		if (count % 2 == 0)
 		{
-			str = 'B';
+			str = 'W';
 		}
 		else
 		{
-			str = 'W';
+			str = 'B';
 		}
 		// should handle the string the sent from graphics
 		// according the protocol. Ex: e2e4           (move e2 to e4)
