@@ -25,5 +25,7 @@ private:
 	bool downRight(Pieces* arr[8][8], string dst, int startX, int startY, int dstY);
 
 	bool knightCheck(Pieces* arr[8][8], string dst);
+
+	bool pawnCheck(Pieces* arr[8][8], string dst);
 	
 };
