@@ -39,76 +39,27 @@ char Rook::move(Pieces* arr[][8], string dst)
 bool Rook::squareCheck(Pieces* arr[][8], string dst)
 {
 	bool ans = false;
-	int x1 = int(dst[1] - '0'), x2 = int(dst[3] - '1'), y1 = int(dst[0] - 'a'), y2 = int(dst[2] - 'a');
-	if (dst[0] == dst[2])
+	int x1 = int('8' - dst[1]), x2 = int('8' - dst[3]), y1 = int(dst[0] - 'a'), y2 = int(dst[2] - 'a');
+
+	//move up
+	if (dst[0] == dst[2] && dst[1] < dst[3])
 	{
-		if (dst[1] < dst[3])
-		{
-			for (int i = x1; i<x2; i++)
-			{
-				if (arr[i][y1]->getTaken() && this != arr[i][y1])
-				{
-					if (arr[i][y1]->getSide()[0] == dst[4] && this->getSide() != arr[i][y1]->getSide() && arr[i][y1]->getSide()[0] != 'n' || arr[i][y1]->getSide()[0] != dst[4])
-					{
-						ans = true;
-						break;
-					}
-				}
-			}
-		}
-		else
-		{
-			for (int i =  8 - x1; i < 8 - x2; i++)
-			{
-				if (arr[i][y1]->getTaken())
-				{
-					if (arr[i][y1]->getSide()[0] == dst[4] && this->getLocation() != arr[i][y1]->getLocation() && arr[i][y1]->getSide()[0] != 'n' || arr[i][y1]->getSide()[0] != dst[4]&& (i + 1) != x1)
-					{
-						ans = true;
-						break;
-					}
-				}
-			}
-		}
+		ans = up(arr, dst, x1, x2, y1);
 	}
-	else if (dst[1] == dst[3])
+	//move down
+	else if (dst[0] == dst[2] && dst[1] > dst[3])
 	{
-		if (dst[0] < dst[2])
-		{
-			for (int j = y1+1; j<y2; j++)
-			{
-				if (arr[8 - x1][j]->getTaken())
-				{
-					if (arr[x2][j]->getSide()[0] != dst[4] && arr[x2][j]->getSide()[0] != 'n' && arr[8 - x1][j]->getSide()[0] == dst[4])
-					{
-
-					}
-					else
-					{
-						ans = true;
-						break;
-					}
-				}
-			}
-		}
-		else
-		{
-			for (int j = y2+1; j<y1; j++)
-			{
-				if (arr[8 - x1][j]->getTaken())
-				{
-					if (arr[x2][j]->getSide()[0] != dst[4] && arr[x2][j]->getSide()[0] != 'n' && arr[8 - x1][j]->getSide()[0] == dst[4])
-					{
-
-					}
-					else
-					{
-						ans = true;
-						break;
-					}
-				}
-			}
-		}
+		ans = down(arr, dst, x1, x2, y1);
+	}
+	//move left
+	else if (dst[0] < dst[2] && dst[1] == dst[3])
+	{
+		ans = left(arr, dst, y1, y2, x1);
+	}
+	//move right
+	else if (dst[0] > dst[2] && dst[1] == dst[3])
+	{
+		ans = right(arr, dst, y1, y2, x1);
 	}
 	else
 	{
@@ -117,3 +68,105 @@ bool Rook::squareCheck(Pieces* arr[][8], string dst)
 	return ans;
 }
 
+
+
+
+bool  Rook::left(Pieces* arr[8][8], string dst, int startY, int dstY, int X)
+{
+	bool ans = false;
+	string dstLoc = string() + dst[2] + dst[3];
+
+	for (int i = startY; i <= dstY; i--)
+	{
+		if (arr[X][i]->getTaken() && this != arr[X][i])
+		{
+			if (i == dstY && arr[X][i]->getSide()[0] != 'n')
+			{
+				ans = true;
+				break;
+			}
+		}
+		if (i == dstY && dstLoc.compare(arr[X][i]->getLocation()))
+		{
+			ans = true;
+		}
+	}
+
+	return ans;
+}
+
+
+
+bool  Rook::right(Pieces* arr[8][8], string dst, int startY, int dstY, int X)
+{
+	bool ans = false;
+	string dstLoc = string() + dst[2] + dst[3];
+
+	for (int i = startY; i <= dstY; i++)
+	{
+		if (arr[X][i]->getTaken() && this != arr[X][i])
+		{
+			if (i == dstY && arr[X][i]->getSide()[0] != 'n')
+			{
+				ans = true;
+				break;
+			}
+		}
+		if (i == dstY && dstLoc.compare(arr[X][i]->getLocation()))
+		{
+			ans = true;
+		}
+	}
+
+	return ans;
+}
+
+
+
+bool  Rook::up(Pieces* arr[8][8], string dst, int startX, int dstX, int Y)
+{
+	bool ans = false;
+	string dstLoc = string() + dst[2] + dst[3];
+
+	for (int i = startX; i <= dstX; i--)
+	{
+		if (arr[i][Y]->getTaken() && this != arr[i][Y])
+		{
+			if (i == dstX && arr[i][Y]->getSide()[0] != 'n')
+			{
+				ans = true;
+				break;
+			}
+		}
+		if (i == dstX && dstLoc.compare(arr[i][Y]->getLocation()))
+		{
+			ans = true;
+		}
+	}
+	return ans;
+}
+
+
+
+bool  Rook::down(Pieces* arr[8][8], string dst, int startX, int dstX, int Y)
+{
+	bool ans = false;
+	string dstLoc = string() + dst[2] + dst[3];
+
+	for (int i = startX; i <= dstX; i++)
+	{
+		if (arr[i][Y]->getTaken() && this != arr[i][Y])
+		{
+			if (i == dstX && arr[i][Y]->getSide()[0] != 'n')
+			{
+				ans = true;
+				break;
+			}
+		}
+		if (i == dstX && dstLoc.compare(arr[i][Y]->getLocation()))
+		{
+			ans = true;
+		}
+	}
+	return ans;
+}
