@@ -23,6 +23,11 @@ string Pieces::getSide()
 	return _side;
 }
 
+string Pieces::getType()
+{
+	return _type;
+}
+
 void Pieces::setLocation(string str)
 {
 	_location = str;

@@ -21,6 +21,7 @@ public:
 	string getSide();
 	void setLocation(string str);
 	string getLocation();
+	string getType();
 
 };
 #pragma endregion
