@@ -9,7 +9,7 @@ Rook::Rook(bool taken, string location, string type, string side) : Pieces(taken
 char Rook::move(Pieces* arr[][8], string dst)
 {
 	char ans = '0';
-	if (_taken != true || _side[0] != dst[4])
+	if (_side[0] != dst[4])
 	{
 		ans = '2';
 	}
@@ -76,7 +76,7 @@ bool  Rook::left(Pieces* arr[8][8], string dst, int startY, int dstY, int X)
 	bool ans = false;
 	string dstLoc = string() + dst[2] + dst[3];
 
-	for (int i = startY; i >= dstY; i--)
+	for (int i = startY-1; i >= dstY; i--)
 	{
 		if (arr[X][i]->getTaken() && this != arr[X][i])
 		{
@@ -102,7 +102,7 @@ bool  Rook::right(Pieces* arr[8][8], string dst, int startY, int dstY, int X)
 	bool ans = false;
 	string dstLoc = string() + dst[2] + dst[3];
 
-	for (int i = startY; i <= dstY; i++)
+	for (int i = startY+1; i <= dstY; i++)
 	{
 		if (arr[X][i]->getTaken() && this != arr[X][i])
 		{
@@ -128,7 +128,7 @@ bool  Rook::up(Pieces* arr[8][8], string dst, int startX, int dstX, int Y)
 	bool ans = false;
 	string dstLoc = string() + dst[2] + dst[3];
 
-	for (int i = startX; i >= dstX; i--)
+	for (int i = startX-1; i >= dstX; i--)
 	{
 		if (arr[i][Y]->getTaken() && this != arr[i][Y])
 		{
@@ -153,7 +153,7 @@ bool  Rook::down(Pieces* arr[8][8], string dst, int startX, int dstX, int Y)
 	bool ans = false;
 	string dstLoc = string() + dst[2] + dst[3];
 
-	for (int i = startX; i <= dstX; i++)
+	for (int i = startX+1; i <= dstX; i++)
 	{
 		if (arr[i][Y]->getTaken() && this != arr[i][Y])
 		{

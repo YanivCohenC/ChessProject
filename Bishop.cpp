@@ -9,7 +9,7 @@ Bishop::Bishop(bool taken, string location, string type, string side) : Pieces(t
 char Bishop::move(Pieces* arr[][8], string dst)
 {
 	char ans = '0';
-	if (_taken != true || _side[0] != dst[4])
+	if (_side[0] != dst[4])
 	{
 		ans = '2';
 	}
@@ -78,7 +78,7 @@ bool Bishop::upLeft(Pieces* arr[8][8], string dst, int startX, int startY, int d
 	bool ans = false;
 	string dstLoc = string() + dst[2] + dst[3];
 
-	for (int i = startX, j = startY; i >= dstX && j >= dstY; i--, j--)
+	for (int i = startX-1, j = startY-1; i >= dstX && j >= dstY; i--, j--)
 	{
 		if (arr[i][j]->getTaken() && this != arr[i][j])
 		{
@@ -103,7 +103,7 @@ bool Bishop::upRight(Pieces* arr[8][8], string dst, int startX, int startY, int 
 	bool ans = false;
 	string dstLoc = string() + dst[2] + dst[3];
 
-	for (int i = startX, j = startY; i >= dstX && j <= dstY; i--, j++)
+	for (int i = startX-1, j = startY+1; i >= dstX && j <= dstY; i--, j++)
 	{
 		if (arr[i][j]->getTaken() && this != arr[i][j])
 		{
@@ -128,7 +128,7 @@ bool Bishop::downLeft(Pieces* arr[8][8], string dst, int startX, int startY, int
 	bool ans = false;
 	string dstLoc = string() + dst[2] + dst[3];
 
-	for (int i = startX, j = startY; i <= dstX && j >= dstY; i++, j--)
+	for (int i = startX+1, j = startY-1; i <= dstX && j >= dstY; i++, j--)
 	{
 		if (arr[i][j]->getTaken() && this != arr[i][j])
 		{
@@ -153,7 +153,7 @@ bool Bishop::downRight(Pieces* arr[8][8], string dst, int startX, int startY, in
 	bool ans = false;
 	string dstLoc = string() + dst[2] + dst[3];
 
-	for (int i = startX, j = startY; i <= dstX && j <= dstY; i++, j++)
+	for (int i = startX+1, j = startY+1; i <= dstX && j <= dstY; i++, j++)
 	{
 		if (arr[i][j]->getTaken() && this != arr[i][j])
 		{
