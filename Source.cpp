@@ -11,6 +11,9 @@
 #include <thread>
 
 using namespace std;
+
+bool chess(string msgFromGraphics, Pieces* arr[8][8], int x, int x1, Pieces* Bking, Pieces* Wking, string str);
+
 void main()
 {
 	srand(time_t(NULL));
@@ -46,6 +49,7 @@ void main()
 	Pieces* arr[8][8];
 	Pieces* Bking;
 	Pieces* Wking;
+	bool check1 = false;
 	int x = 0;
 	for (int i = 0; i < 8; i++)
 	{
@@ -87,7 +91,7 @@ void main()
 				break;
 			case 'K':
 				arr[i][j] = new King(true, s, "King", "White");
-				//Wking = arr[i][j];
+				Wking = arr[i][j];
 				break;
 			case 'Q':
 				arr[i][j] = new Queen(true, s, "queen", "White");
@@ -129,39 +133,14 @@ void main()
 		int x = int(msgFromGraphics[0] - 'a');
 		int x1 = int('8' - msgFromGraphics[1]);
 		board[0] = arr[x1][x]->move(arr, msgFromGraphics + str);
-		//while (1)
-		//{
-		//	Pieces* temp;
-		//	int y = int(msgFromGraphics[2] - 'a');
-		//	int y1 = int('8' - msgFromGraphics[3]);
-		//	string strL = arr[y1][y]->getLocation();
-		//	temp = arr[y1][y];
-		//	arr[y1][y] = arr[x1][x];
-		//	arr[x1][x] = temp;
-		//	arr[x1][x]->setLocation(arr[y1][y]->getLocation());
-		//	arr[y1][y]->setLocation(strL);
-		//	if (Wking->move(arr, Wking->getLocation() + Wking->getLocation() + str) == '4')
-		//	{
-		//		board[0] = '4';
-		//	}
-		//	else if (Bking->move(arr, Bking->getLocation() + Bking->getLocation() + str) == '4')
-		//	{
-		//		board[0] = '4';
-		//	}
-		//	strL = arr[x1][x]->getLocation();
-		//	temp = arr[x1][x];
-		//	arr[x1][x] = arr[y1][y];
-		//	arr[y1][y] = temp;
-		//	arr[y1][y]->setLocation(arr[x1][x]->getLocation());
-		//	arr[x1][x]->setLocation(strL);
-		//	break;
-		//}
-		strcpy_s(msgToGraphics, board); // msgToGraphics should contain the result of the operation
-
-		msgToGraphics[1] = 0;
+		
+		if (chess(msgFromGraphics, arr, x, x1, Bking, Wking, str))
+		{
+			board[0] = '4';
+		}
 
 
-		if (msgToGraphics[0] == '0' || msgToGraphics[0] == '1')
+		if (board[0] == '0' || board[0] == '1')
 		{
 			count++;
 			Pieces* temp;
@@ -179,6 +158,23 @@ void main()
 			arr[x1][x]->setLocation(arr[y1][y]->getLocation());
 			arr[y1][y]->setLocation(strL);
 		}
+		if (str == "B")
+		{
+			str = 'W';
+		}
+		else
+		{
+			str = 'B';
+		}
+		if (chess(msgFromGraphics, arr, int(msgFromGraphics[2] - 'a'), int('8' - msgFromGraphics[3]), Bking, Wking, str))
+		{
+			board[0] = '1';
+		}
+
+		strcpy_s(msgToGraphics, board); // msgToGraphics should contain the result of the operation
+
+		msgToGraphics[1] = 0;
+		
 		// return result to graphics		
 		p.sendMessageToGraphics(msgToGraphics);
 
@@ -188,4 +184,34 @@ void main()
 	}
 
 	p.close();
+}
+
+bool chess(string msgFromGraphics, Pieces* arr[8][8], int x, int x1, Pieces* Bking, Pieces* Wking,string str)
+{
+	Pieces* temp;
+	Pieces* emp = new Empty(false, (to_string(msgFromGraphics[2]) + to_string(msgFromGraphics[3])), "Empty", "no");
+	bool ans = false;
+	int y = int(msgFromGraphics[2] - 'a');
+	int y1 = int('8' - msgFromGraphics[3]);
+	string strL = arr[y1][y]->getLocation();
+	temp = arr[y1][y];
+	arr[y1][y] = arr[x1][x];
+	arr[x1][x] = emp;
+	arr[x1][x]->setLocation(arr[y1][y]->getLocation());
+	arr[y1][y]->setLocation(strL);
+	if (Wking->move(arr, Wking->getLocation() + Wking->getLocation() + str) == '4')
+	{
+		ans = true;
+	}
+	else if (Bking->move(arr, Bking->getLocation() + Bking->getLocation() + str) == '4')
+	{
+		ans = true;
+	}
+	strL = arr[x1][x]->getLocation();
+	temp = arr[x1][x];
+	arr[x1][x] = arr[y1][y];
+	arr[y1][y] = temp;
+	arr[y1][y]->setLocation(arr[x1][x]->getLocation());
+	arr[x1][x]->setLocation(strL);
+	return ans;
 }
