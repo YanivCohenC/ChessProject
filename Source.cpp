@@ -140,6 +140,7 @@ void main()
 		}
 
 
+
 		if (board[0] == '0' || board[0] == '1')
 		{
 			count++;
@@ -158,15 +159,12 @@ void main()
 			arr[x1][x]->setLocation(arr[y1][y]->getLocation());
 			arr[y1][y]->setLocation(strL);
 		}
-		if (str == "B")
+
+		if (Wking->move(arr, Wking->getLocation() + Wking->getLocation() + "W") == '4' && board[0] != '4')
 		{
-			str = 'W';
+			board[0] = '1';
 		}
-		else
-		{
-			str = 'B';
-		}
-		if (chess(msgFromGraphics, arr, int(msgFromGraphics[2] - 'a'), int('8' - msgFromGraphics[3]), Bking, Wking, str))
+		else if (Bking->move(arr, Bking->getLocation() + Bking->getLocation() + "B") == '4' && board[0] != '4' )
 		{
 			board[0] = '1';
 		}
@@ -174,7 +172,7 @@ void main()
 		strcpy_s(msgToGraphics, board); // msgToGraphics should contain the result of the operation
 
 		msgToGraphics[1] = 0;
-		
+
 		// return result to graphics		
 		p.sendMessageToGraphics(msgToGraphics);
 
@@ -189,15 +187,13 @@ void main()
 bool chess(string msgFromGraphics, Pieces* arr[8][8], int x, int x1, Pieces* Bking, Pieces* Wking,string str)
 {
 	Pieces* temp;
-	Pieces* emp = new Empty(false, (to_string(msgFromGraphics[2]) + to_string(msgFromGraphics[3])), "Empty", "no");
 	bool ans = false;
 	int y = int(msgFromGraphics[2] - 'a');
 	int y1 = int('8' - msgFromGraphics[3]);
 	string strL = arr[y1][y]->getLocation();
 	temp = arr[y1][y];
 	arr[y1][y] = arr[x1][x];
-	arr[x1][x] = emp;
-	arr[x1][x]->setLocation(arr[y1][y]->getLocation());
+	arr[x1][x] = new Empty(false, arr[y1][y]->getLocation(), "empty", "no");
 	arr[y1][y]->setLocation(strL);
 	if (Wking->move(arr, Wking->getLocation() + Wking->getLocation() + str) == '4')
 	{
