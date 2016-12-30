@@ -112,7 +112,7 @@ bool King::bishopCheck(Pieces* arr[8][8], string dst)
 {
 	int x = int('8' - dst[3]), y = int(dst[2] - 'a');
 	bool ans = false;
-	if (upLeft(arr, dst, x, y, 0) || upRight(arr, dst, x, y, 8) || downLeft(arr, dst, x, y, 0) || downRight(arr, dst, x, y, 8))
+	if (upLeft(arr, dst, x, y, 0) || upRight(arr, dst, x, y, 7) || downLeft(arr, dst, x, y, 0) || downRight(arr, dst, x, y, 7))
 	{
 		ans = true;
 	}
@@ -124,26 +124,6 @@ bool King::knightCheck(Pieces* arr[8][8], string dst)
 {
 	int x = int('8' - dst[3]), y = int(dst[2] - 'a');
 	bool ans = false;
-	//UP
-	if ()
-	{
-
-	}
-	//Down
-	else if ()
-	{
-
-	}
-	//Left
-	else if ()
-	{
-
-	}
-	//Right
-	else if ()
-	{
-
-	}
 	return ans;
 }
 
@@ -156,21 +136,21 @@ bool King::pawnCheck(Pieces* arr[8][8], string dst)
 	{
 		if (y - 1 >= 0 && y+1 < 8 && x + 1 < 8)
 		{
-			if (arr[x + 1][y + 1]->getType()[0] == 'p' || arr[x + 1][y - 1]->getType()[0] == 'p')
+			if (arr[x + 1][y + 1]->getType()[0] == 'p' && arr[x + 1][y + 1]->getSide()[0] == 'W' || arr[x + 1][y - 1]->getType()[0] == 'p' && arr[x + 1][y - 1]->getSide()[0] == 'W')
 			{
 				ans = true;
 			}
 		}
 		else if (y - 1 < 0 && y + 1 < 8 && x + 1 < 8)
 		{
-			if (arr[x + 1][y + 1]->getType()[0] == 'p')
+			if (arr[x + 1][y + 1]->getType()[0] == 'p' && arr[x + 1][y + 1]->getSide()[0] == 'W')
 			{
 				ans = true;
 			}
 		}
 		else if (y - 1 >= 0 && y + 1 > 8 && x + 1 < 8)
 		{
-			if (arr[x + 1][y - 1]->getType()[0] == 'p')
+			if (arr[x + 1][y - 1]->getType()[0] == 'p' && arr[x + 1][y - 1]->getSide()[0] == 'W')
 			{
 				ans = true;
 			}
@@ -180,21 +160,21 @@ bool King::pawnCheck(Pieces* arr[8][8], string dst)
 	{
 		if (y - 1 >= 0 && y + 1 < 8 && x - 1 >= 0)
 		{
-			if (arr[x - 1][y + 1]->getType()[0] == 'p' || arr[x - 1][y - 1]->getType()[0] == 'p')
+			if ((arr[x - 1][y + 1]->getType()[0] == 'p' && arr[x - 1][y + 1]->getSide()[0] == 'B') || (arr[x - 1][y - 1]->getType()[0] == 'p' && arr[x - 1][y - 1]->getSide()[0] == 'B'))
 			{
 				ans = true;
 			}
 		}
 		else if (y - 1 < 0 && y + 1 < 8 && x - 1 >= 8)
 		{
-			if (arr[x - 1][y + 1]->getType()[0] == 'p')
+			if (arr[x - 1][y + 1]->getType()[0] == 'p' && arr[x - 1][y + 1]->getSide()[0] == 'B')
 			{
 				ans = true;
 			}
 		}
 		else if (y - 1 >= 0 && y + 1 > 8 && x - 1 >= 8)
 		{
-			if (arr[x - 1][y - 1]->getType()[0] == 'p')
+			if (arr[x - 1][y - 1]->getType()[0] == 'p' && arr[x - 1][y - 1]->getSide()[0] == 'B')
 			{
 				ans = true;
 			}
@@ -209,7 +189,7 @@ bool King::upLeft(Pieces* arr[8][8], string dst, int startX, int startY, int dst
 	bool ans = false;
 	string dstLoc = string() + dst[2] + dst[3];
 
-	for (int i = startX - 1, j = startY - 1; j >= dstY && i < 8; i--, j--)
+	for (int i = startX - 1, j = startY - 1; j >= dstY && i > 0; i--, j--)
 	{
 		if (arr[i][j]->getTaken() && this != arr[i][j])
 		{
@@ -236,7 +216,7 @@ bool King::upRight(Pieces* arr[8][8], string dst, int startX, int startY, int ds
 	bool ans = false;
 	string dstLoc = string() + dst[2] + dst[3];
 
-	for (int i = startX - 1, j = startY + 1; j <= dstY && i < 8; i--, j++)
+	for (int i = startX - 1, j = startY + 1; j <= dstY && i > 0; i--, j++)
 	{
 		if (arr[i][j]->getTaken() && this != arr[i][j])
 		{
@@ -330,6 +310,10 @@ bool King::left(Pieces* arr[8][8], string dst, int startY, int dstY, int X)
 					ans = true;
 					break;
 				}
+				else
+				{
+					break;
+				}
 			}
 			else if (arr[X][i]->getSide()[0] == dst[4])
 			{
@@ -356,6 +340,10 @@ bool King::right(Pieces* arr[8][8], string dst, int startY, int dstY, int X)
 				if (arr[X][i]->getType()[0] == 'r' || arr[X][i]->getType()[0] == 'q' || arr[X][i]->getType()[0] == 'k')
 				{
 					ans = true;
+					break;
+				}
+				else
+				{
 					break;
 				}
 			}
@@ -386,6 +374,10 @@ bool King::up(Pieces* arr[8][8], string dst, int startX, int dstX, int Y)
 					ans = true;
 					break;
 				}
+				else
+				{
+					break;
+				}
 			}
 			else if (arr[i][Y]->getSide()[0] == dst[4])
 			{
@@ -411,6 +403,10 @@ bool  King::down(Pieces* arr[8][8], string dst, int startX, int dstX, int Y)
 				if (arr[i][Y]->getType()[0] == 'r' || arr[i][Y]->getType()[0] == 'q' || arr[i][Y]->getType()[0] == 'k')
 				{
 					ans = true;
+					break;
+				}
+				else
+				{
 					break;
 				}
 			}
