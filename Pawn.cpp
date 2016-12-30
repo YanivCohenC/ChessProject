@@ -43,12 +43,18 @@ bool Pawn::squareCheck(Pieces* arr[][8], string dst)
 	
 	if (_side[0] == 'W' && y1 == 2 && y2 == y1 + 2 && x1 == x2) // White pawn special move up
 	{
-		return ans;
+		if (!(arr[int('8' - dst[3])][int(dst[2] - 'a')]->getTaken()))
+		{
+			return ans;
+		}
 	}
 
 	if (_side[0] == 'B' && y1 == 7 && y2 == y1 - 2 && x1 == x2) // Black pawn special move down
 	{
-		return ans;
+		if (!(arr[int('8' - dst[3])][int(dst[2] - 'a')]->getTaken()))
+		{
+			return ans;
+		}
 	}
 
 	if (_side[0] == 'W' && x1 == x2 && y1 == y2 - 1 && !(arr[int('8' - dst[3])][int(dst[2] - 'a')]->getTaken())) // White move one up and its free

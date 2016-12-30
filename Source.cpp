@@ -66,7 +66,7 @@ void main()
 				arr[i][j] = new Bishop(true, s, "bishop", "Black");
 				break;
 			case 'k':
-				arr[i][j] = new King(true, s, "king", "Black");
+				arr[i][j] = new King(true, s, "King", "Black");
 				Bking = arr[i][j];
 				break;
 			case 'q':
@@ -86,7 +86,7 @@ void main()
 				arr[i][j] = new Bishop(true, s, "bishop", "White");
 				break;
 			case 'K':
-				arr[i][j] = new King(true, s, "king", "White");
+				arr[i][j] = new King(true, s, "King", "White");
 				//Wking = arr[i][j];
 				break;
 			case 'Q':
