@@ -134,14 +134,14 @@ void main()
 		int x1 = int('8' - msgFromGraphics[1]);
 		board[0] = arr[x1][x]->move(arr, msgFromGraphics + str);
 		
-		if (chess(msgFromGraphics, arr, x, x1, Bking, Wking, str))
+		if (arr[x1][x]->getType()[0] != 'K' && board[0] == '0' && chess(msgFromGraphics, arr, x, x1, Bking, Wking, str))
 		{
 			board[0] = '4';
 		}
 
 
 
-		if (board[0] == '0' || board[0] == '1')
+		if (board[0] == '0')
 		{
 			count++;
 			Pieces* temp;
@@ -160,11 +160,11 @@ void main()
 			arr[y1][y]->setLocation(strL);
 		}
 
-		if (Wking->move(arr, Wking->getLocation() + Wking->getLocation() + "W") == '4' && board[0] != '4')
+		if (Wking->move(arr, Wking->getLocation() + Wking->getLocation() + "W") == '4' && board[0] == '0')
 		{
 			board[0] = '1';
 		}
-		else if (Bking->move(arr, Bking->getLocation() + Bking->getLocation() + "B") == '4' && board[0] != '4' )
+		else if (Bking->move(arr, Bking->getLocation() + Bking->getLocation() + "B") == '4' && board[0] == '0' )
 		{
 			board[0] = '1';
 		}
@@ -184,17 +184,22 @@ void main()
 	p.close();
 }
 
-bool chess(string msgFromGraphics, Pieces* arr[8][8], int x, int x1, Pieces* Bking, Pieces* Wking,string str)
+bool chess(string msgFromGraphics, Pieces* arr[8][8], int x, int x1, Pieces* Bking, Pieces* Wking, string str)
 {
 	Pieces* temp;
+	Pieces* temp1;
 	bool ans = false;
 	int y = int(msgFromGraphics[2] - 'a');
 	int y1 = int('8' - msgFromGraphics[3]);
 	string strL = arr[y1][y]->getLocation();
 	temp = arr[y1][y];
-	arr[y1][y] = arr[x1][x];
-	arr[x1][x] = new Empty(false, arr[y1][y]->getLocation(), "empty", "no");
-	arr[y1][y]->setLocation(strL);
+	temp1 = arr[x1][x];
+	if (arr[y1][y]->getSide()[0] != 'n' && arr[x1][x]->getSide()[0] != 'n' && arr[x1][x]->getSide()[0] != arr[y1][y]->getSide()[0])
+	{
+		arr[y1][y] = new Empty(false, (to_string(msgFromGraphics[2]) + to_string(msgFromGraphics[3])), "Empty", "no");
+	}
+	arr[x1][x] = arr[y1][y];
+	arr[y1][y] = temp1;
 	if (Wking->move(arr, Wking->getLocation() + Wking->getLocation() + str) == '4')
 	{
 		ans = true;
@@ -203,11 +208,7 @@ bool chess(string msgFromGraphics, Pieces* arr[8][8], int x, int x1, Pieces* Bki
 	{
 		ans = true;
 	}
-	strL = arr[x1][x]->getLocation();
-	temp = arr[x1][x];
-	arr[x1][x] = arr[y1][y];
+	arr[x1][x] = temp1;
 	arr[y1][y] = temp;
-	arr[y1][y]->setLocation(arr[x1][x]->getLocation());
-	arr[x1][x]->setLocation(strL);
 	return ans;
 }
