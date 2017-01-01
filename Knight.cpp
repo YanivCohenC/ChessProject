@@ -19,15 +19,15 @@ char Knight::move(Pieces* arr[][8], string dst) // Main Knight move function
 	}
 	else if ((dst[1] > '8' || dst[1] < '0') || (dst[3] > '8' || dst[3] < '0') || (dst[0] > 'h' || dst[0] < 'a') || (dst[2] > 'h' || dst[2] < 'a'))
 	{
-		ans = '5';
+		ans = '5'; // Checking if the action is in the limits of the board (8x8, 1-8, a-h)
 	}
 	else if (squareCheck(arr, dst))
 	{
-		ans = '6';
+		ans = '6'; // The move checking function of the current piece
 	}
 	else if (_location[0] == dst[2] && _location[1] == dst[3])
 	{
-		ans = '7';
+		ans = '7'; // When the player tries to move the piece to the current location
 	}
 	return ans;
 }
@@ -40,7 +40,7 @@ bool Knight::squareCheck(Pieces* arr[][8], string dst)
 {
 	bool ans = false;
 	int y1 = int(dst[1] - '0'), y2 = int(dst[3] - '0'), x1 = int(dst[0] - 'a') + 1, x2 = int(dst[2] - 'a') + 1;
-
+	// Indexes are as follows: x1 and y1 are the source and x2 and y2 are the destination, and checking for all of the possible knight movements 
 	if ((x1 == x2 - 1 && y1 == y2 - 2)/* < UP RIGHT */ || (x1 == x2 + 1 && y1 == y2 - 2)/* < UP LEFT */)
 	{
 		return ans;
