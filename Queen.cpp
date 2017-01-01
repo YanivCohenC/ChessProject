@@ -33,15 +33,25 @@ char Queen::move(Pieces* arr[][8], string dst)
 }
 
 
+/*The function will use 2 objects rook and bishop to check if the movement is llegal
+input:
+Pieces* arr[][8], string dst
+output:
+true if the movement illegal or there is something in the way of the queen
+false if the way is clear and the movement is llegal
+*/
 bool Queen::squareCheck(Pieces* arr[][8], string dst)
 {
 	Pieces* rookMove = new Rook(false, this->getLocation(), "rook", this->getSide());
 	Pieces* bishopMove = new Bishop(false, this->getLocation(), "rook", this->getSide());
 	bool ans = false;
-
+	//The queen use the movement of rook and bishop so we use 2 objects one of them bishop and another one rook and checking if one of the move of 
+	//the pieces give 0 if not the if work and we making var ans to true
 	if (rookMove->move(arr, dst) != '0' && bishopMove->move(arr, dst) != '0')
 	{
 		ans = true;
 	}
+	delete rookMove;
+	delete bishopMove;
 	return ans;
 }

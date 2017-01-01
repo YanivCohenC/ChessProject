@@ -33,8 +33,13 @@ char Rook::move(Pieces* arr[][8], string dst)
 }
 
 
-/*
 
+/*Function that will check to where the user want to move and will call the right function to check the row or the line
+input:
+Pieces* arr[][8], string dst
+output:
+true if there is piece in the way of the rook
+false if the way is clear
 */
 bool Rook::squareCheck(Pieces* arr[][8], string dst)
 {
@@ -70,7 +75,13 @@ bool Rook::squareCheck(Pieces* arr[][8], string dst)
 
 
 
-
+/*The fucntion will check if the left line is free and there is no pieces in the way of the rook to the dst
+input:
+Pieces* arr[8][8], string dst, int startY, int dstY, int X
+output:
+true if there is something in the way that doesnt allow to move to the dst
+false if the way is clear
+*/
 bool  Rook::left(Pieces* arr[8][8], string dst, int startY, int dstY, int X)
 {
 	bool ans = false;
@@ -78,14 +89,17 @@ bool  Rook::left(Pieces* arr[8][8], string dst, int startY, int dstY, int X)
 
 	for (int i = startY-1; i >= dstY; i--)
 	{
+		//checkng if there is piece is the square
 		if (arr[X][i]->getTaken() && this != arr[X][i])
 		{
+			//checking if there is something in the way and not in the dst
 			if (i != dstY && arr[X][i]->getSide()[0] != 'n')
 			{
 				ans = true;
 				break;
 			}
 		}
+		//if the for in the last run and the location of currect square not equeal to the dst there is illegal dst
 		if (i == dstY && dstLoc.compare(arr[X][i]->getLocation()))
 		{
 			ans = true;
@@ -96,7 +110,13 @@ bool  Rook::left(Pieces* arr[8][8], string dst, int startY, int dstY, int X)
 }
 
 
-
+/*The fucntion will check if the right line is free and there is no pieces in the way of the rook to the dst
+input:
+Pieces* arr[8][8], string dst, int startY, int dstY, int X
+output:
+true if there is something in the way that doesnt allow to move to the dst
+false if the way is clear
+*/
 bool  Rook::right(Pieces* arr[8][8], string dst, int startY, int dstY, int X)
 {
 	bool ans = false;
@@ -104,14 +124,17 @@ bool  Rook::right(Pieces* arr[8][8], string dst, int startY, int dstY, int X)
 
 	for (int i = startY+1; i <= dstY; i++)
 	{
+		//checkng if there is piece is the square
 		if (arr[X][i]->getTaken() && this != arr[X][i])
 		{
+			//checking if there is something in the way and not in the dst
 			if (i != dstY && arr[X][i]->getSide()[0] != 'n')
 			{
 				ans = true;
 				break;
 			}
 		}
+		//if the for in the last run and the location of currect square not equeal to the dst there is illegal dst
 		if (i == dstY && dstLoc.compare(arr[X][i]->getLocation()))
 		{
 			ans = true;
@@ -123,6 +146,13 @@ bool  Rook::right(Pieces* arr[8][8], string dst, int startY, int dstY, int X)
 
 
 
+/*The fucntion will check if the up row is free and there is no pieces in the way of the rook to the dst
+input:
+Pieces* arr[8][8], string dst, int startY, int dstY, int X
+output:
+true if there is something in the way that doesnt allow to move to the dst
+false if the way is clear
+*/
 bool  Rook::up(Pieces* arr[8][8], string dst, int startX, int dstX, int Y)
 {
 	bool ans = false;
@@ -130,14 +160,17 @@ bool  Rook::up(Pieces* arr[8][8], string dst, int startX, int dstX, int Y)
 
 	for (int i = startX-1; i >= dstX; i--)
 	{
+		//checkng if there is piece is the square
 		if (arr[i][Y]->getTaken() && this != arr[i][Y])
 		{
+			//checking if there is something in the way and not in the dst
 			if (i != dstX && arr[i][Y]->getSide()[0] != 'n')
 			{
 				ans = true;
 				break;
 			}
 		}
+		//if the for in the last run and the location of currect square not equeal to the dst there is illegal dst
 		if (i == dstX && dstLoc.compare(arr[i][Y]->getLocation()))
 		{
 			ans = true;
@@ -148,6 +181,13 @@ bool  Rook::up(Pieces* arr[8][8], string dst, int startX, int dstX, int Y)
 
 
 
+/*The fucntion will check if the down row is free and there is no pieces in the way of the rook to the dst
+input:
+Pieces* arr[8][8], string dst, int startY, int dstY, int X
+output:
+true if there is something in the way that doesnt allow to move to the dst
+false if the way is clear
+*/
 bool  Rook::down(Pieces* arr[8][8], string dst, int startX, int dstX, int Y)
 {
 	bool ans = false;
@@ -155,14 +195,17 @@ bool  Rook::down(Pieces* arr[8][8], string dst, int startX, int dstX, int Y)
 
 	for (int i = startX+1; i <= dstX; i++)
 	{
+		//checkng if there is piece is the square
 		if (arr[i][Y]->getTaken() && this != arr[i][Y])
 		{
+			//checking if there is something in the way and not in the dst
 			if (i != dstX && arr[i][Y]->getSide()[0] != 'n')
 			{
 				ans = true;
 				break;
 			}
 		}
+		//if the for in the last run and the location of currect square not equeal to the dst there is illegal dst
 		if (i == dstX && dstLoc.compare(arr[i][Y]->getLocation()))
 		{
 			ans = true;

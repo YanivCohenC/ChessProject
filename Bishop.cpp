@@ -33,8 +33,12 @@ char Bishop::move(Pieces* arr[][8], string dst)
 }
 
 
-/*
-
+/*Function that will check to where the user want to move and will call the right function to check the slent
+input:
+Pieces* arr[][8], string dst
+output:
+true if there is piece in the way of the bishop
+false if the way is clear
 */
 bool Bishop::squareCheck(Pieces* arr[][8], string dst)
 {
@@ -72,7 +76,13 @@ bool Bishop::squareCheck(Pieces* arr[][8], string dst)
 }
 
 
-
+/*Function that check all the up left slant to see that there is no piece in the way
+input:
+Pieces* arr[8][8], string dst, int startX, int startY, int dstY
+output:
+true if there is piece in the way of the bishop
+false if the way is clear
+*/
 bool Bishop::upLeft(Pieces* arr[8][8], string dst, int startX, int startY, int dstX, int dstY)
 {
 	bool ans = false;
@@ -80,14 +90,17 @@ bool Bishop::upLeft(Pieces* arr[8][8], string dst, int startX, int startY, int d
 
 	for (int i = startX-1, j = startY-1; i >= dstX && j >= dstY; i--, j--)
 	{
+		//checkng if there is piece is the square
 		if (arr[i][j]->getTaken() && this != arr[i][j])
 		{
+			//checking if there is something in the way and not in the dst
 			if (i != dstX && j != dstY && arr[i][j]->getSide()[0] != 'n')
 			{
 				ans = true;
 				break;
 			}
 		}
+		//if the for in the last run and the location of currect square not equeal to the dst there is illegal dst
 		if ((i == dstX || j == dstY) && dstLoc.compare(arr[i][j]->getLocation()))
 		{
 			ans = true;
@@ -98,6 +111,13 @@ bool Bishop::upLeft(Pieces* arr[8][8], string dst, int startX, int startY, int d
 
 
 
+/*Function that check all the up right slant to see that there is no piece in the way
+input:
+Pieces* arr[8][8], string dst, int startX, int startY, int dstY
+output:
+true if there is piece in the way of the bishop
+false if the way is clear
+*/
 bool Bishop::upRight(Pieces* arr[8][8], string dst, int startX, int startY, int dstX, int dstY)
 {
 	bool ans = false;
@@ -105,14 +125,17 @@ bool Bishop::upRight(Pieces* arr[8][8], string dst, int startX, int startY, int 
 
 	for (int i = startX-1, j = startY+1; i >= dstX && j <= dstY; i--, j++)
 	{
+		//checkng if there is piece is the square
 		if (arr[i][j]->getTaken() && this != arr[i][j])
 		{
+			//checking if there is something in the way and not in the dst
 			if (i != dstX && j != dstY && arr[i][j]->getSide()[0] != 'n')
 			{
 				ans = true;
 				break;
 			}
 		}
+		//if the for in the last run and the location of currect square not equeal to the dst there is illegal dst
 		if ((i == dstX || j == dstY) && dstLoc.compare(arr[i][j]->getLocation()))
 		{
 			ans = true;
@@ -122,7 +145,13 @@ bool Bishop::upRight(Pieces* arr[8][8], string dst, int startX, int startY, int 
 }
 
 
-
+/*Function that check all the down left slant to see that there is no piece in the way
+input:
+Pieces* arr[8][8], string dst, int startX, int startY, int dstY
+output:
+true if there is piece in the way of the bishop
+false if the way is clear
+*/
 bool Bishop::downLeft(Pieces* arr[8][8], string dst, int startX, int startY, int dstX, int dstY)
 {
 	bool ans = false;
@@ -130,14 +159,17 @@ bool Bishop::downLeft(Pieces* arr[8][8], string dst, int startX, int startY, int
 
 	for (int i = startX+1, j = startY-1; i <= dstX && j >= dstY; i++, j--)
 	{
+		//checkng if there is piece is the square
 		if (arr[i][j]->getTaken() && this != arr[i][j])
 		{
+			//checking if there is something in the way and not in the dst
 			if (i != dstX && j != dstY && arr[i][j]->getSide()[0] != 'n')
 			{
 				ans = true;
 				break;
 			}
 		}
+		//if the for in the last run and the location of currect square not equeal to the dst there is illegal dst
 		if ((i == dstX || j == dstY) && dstLoc.compare(arr[i][j]->getLocation()))
 		{
 			ans = true;
@@ -147,7 +179,13 @@ bool Bishop::downLeft(Pieces* arr[8][8], string dst, int startX, int startY, int
 }
 
 
-
+/*Function that check all the down right slant to see that there is no piece in the way
+input:
+Pieces* arr[8][8], string dst, int startX, int startY, int dstY
+output:
+true if there is piece in the way of the bishop
+false if the way is clear
+*/
 bool Bishop::downRight(Pieces* arr[8][8], string dst, int startX, int startY, int dstX, int dstY)
 {
 	bool ans = false;
@@ -155,14 +193,17 @@ bool Bishop::downRight(Pieces* arr[8][8], string dst, int startX, int startY, in
 
 	for (int i = startX+1, j = startY+1; i <= dstX && j <= dstY; i++, j++)
 	{
+		//checkng if there is piece is the square
 		if (arr[i][j]->getTaken() && this != arr[i][j])
 		{
+			//checking if there is something in the way and not in the dst
 			if (i != dstX && j != dstY && arr[i][j]->getSide()[0] != 'n')
 			{
 				ans = true;
 				break;
 			}
 		}
+		//if the for in the last run and the location of currect square not equeal to the dst there is illegal dst
 		if ((i == dstX || j == dstY) && dstLoc.compare(arr[i][j]->getLocation()))
 		{
 			ans = true;

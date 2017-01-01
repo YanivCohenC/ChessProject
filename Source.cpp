@@ -120,6 +120,7 @@ void main()
 	{
 		string str;
 
+		//checking who is turn now
 		if (count % 2 == 0)
 		{
 			str = 'W';
@@ -128,10 +129,11 @@ void main()
 		{
 			str = 'B';
 		}
-		// should handle the string the sent from graphics
-		// according the protocol. Ex: e2e4           (move e2 to e4)
 		int x = int(msgFromGraphics[0] - 'a');
 		int x1 = int('8' - msgFromGraphics[1]);
+		// should handle the string the sent from graphics
+		// according the protocol. Ex: e2e4           (move e2 to e4)
+		//adding str in the end of msgFromGraphics so we will be able to know who is turn now in every soldier
 		board[0] = arr[x1][x]->move(arr, msgFromGraphics + str);
 		
 		if (arr[x1][x]->getType()[0] != 'K' && board[0] == '0' && chess(msgFromGraphics, arr, x, x1, Bking, Wking, str))
@@ -140,7 +142,7 @@ void main()
 		}
 
 
-
+		//changing the arr so the arr will be as the board
 		if (board[0] == '0')
 		{
 			count++;
@@ -148,6 +150,7 @@ void main()
 			int y = int(msgFromGraphics[2] - 'a');
 			int y1 = int('8' - msgFromGraphics[3]);
 			string strL = arr[y1][y]->getLocation();
+			//if in the dst enemy soldier deleting him and place there empty square
 			if (arr[y1][y]->getSide()[0] != 'n' && arr[x1][x]->getSide()[0] != 'n' && arr[x1][x]->getSide()[0] != arr[y1][y]->getSide()[0])
 			{
 				delete arr[y1][y];
@@ -160,6 +163,7 @@ void main()
 			arr[y1][y]->setLocation(strL);
 		}
 
+		//checking if the move make chess on one of the sides
 		if (Wking->move(arr, Wking->getLocation() + Wking->getLocation() + "W") == '4' && board[0] == '0')
 		{
 			board[0] = '1';
@@ -184,6 +188,14 @@ void main()
 	p.close();
 }
 
+
+/*function that make the move and check if the move made chess on the king of the player that just now played
+input:
+string msgFromGraphics, Pieces* arr[8][8], int x, int x1, Pieces* Bking, Pieces* Wking, string str
+output:
+false if chess doesnt heppened 
+true if chess have been done
+*/
 bool chess(string msgFromGraphics, Pieces* arr[8][8], int x, int x1, Pieces* Bking, Pieces* Wking, string str)
 {
 	Pieces* temp;
@@ -194,12 +206,14 @@ bool chess(string msgFromGraphics, Pieces* arr[8][8], int x, int x1, Pieces* Bki
 	string strL = arr[y1][y]->getLocation();
 	temp = arr[y1][y];
 	temp1 = arr[x1][x];
+	//if there an enemy piece in the dst replacing it to empty piece
 	if (arr[y1][y]->getSide()[0] != 'n' && arr[x1][x]->getSide()[0] != 'n' && arr[x1][x]->getSide()[0] != arr[y1][y]->getSide()[0])
 	{
 		arr[y1][y] = new Empty(false, (to_string(msgFromGraphics[2]) + to_string(msgFromGraphics[3])), "Empty", "no");
 	}
 	arr[x1][x] = arr[y1][y];
 	arr[y1][y] = temp1;
+	//cheking if there is a chess on the kings
 	if (Wking->move(arr, Wking->getLocation() + Wking->getLocation() + str) == '4')
 	{
 		ans = true;
