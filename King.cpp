@@ -44,7 +44,6 @@ bool King::squareCheck(Pieces* arr[8][8], string dst)
 	bool ans = true;
 	int x = ('8' - dst[3]), y = (dst[2] - 'a');
 
-	// THIS WORKS WELL
 	if (dst[0] == dst[2] && (dst[1] + 1 == dst[3] || dst[1] - 1 == dst[3])) // Up or down check
 	{
 		if (!(arr[x][y]->getTaken()) || (arr[x][y]->getTaken() && arr[x][y]->getSide()[0] != dst[4]))
@@ -53,7 +52,6 @@ bool King::squareCheck(Pieces* arr[8][8], string dst)
 		}
 	}
 
-	// THIS WORKS WELL
 	else if (dst[1] == dst[3] && (dst[0] + 1 == dst[2] || dst[0] - 1 == dst[2])) // Left or right check
 	{
 		char ch = arr[x][y]->getSide()[0];
@@ -63,7 +61,6 @@ bool King::squareCheck(Pieces* arr[8][8], string dst)
 		}
 	}
 
-	// THIS NEEDS FIXING
 	else if ((dst[0] == dst[2] + 1 && dst[1] == dst[3] + 1) || (dst[1] == dst[3] - 1 && dst[2] == dst[0] - 1)) // Upper right or lower left check
 	{
 		if (!(arr[x][y]->getTaken()) || (arr[x][y]->getTaken() && arr[x][y]->getSide()[0] != dst[4]))
@@ -72,7 +69,6 @@ bool King::squareCheck(Pieces* arr[8][8], string dst)
 		}
 	}
 
-	// THIS NEEDS FIXING
 	else if ((dst[0] == dst[2] - 1 && dst[1] == dst[3] - 1) || (dst[1] == dst[3] + 1 && dst[2] == dst[0] + 1)) // Upper left or lower right check
 	{
 		if (!(arr[x][y]->getTaken()) || (arr[x][y]->getTaken() && arr[x][y]->getSide()[0] != dst[4]))
