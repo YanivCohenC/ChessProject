@@ -1,21 +1,21 @@
 #include "Knight.h"
 
 
-Knight::Knight(bool taken, string location, string type, string side) : Pieces(taken, location, type, side)
+Knight::Knight(bool taken, string location, string type, string side) : Pieces(taken, location, type, side) // CTOR of knight
 {
-
+	// Inherits from Pieces, and uses its values (istaken, location, time and side)
 }
 
-char Knight::move(Pieces* arr[][8], string dst)
+char Knight::move(Pieces* arr[][8], string dst) // Main Knight move function
 {
-	char ans = '0';
-	if (_taken != true || _side[0] != dst[4])
+	char ans = '0'; // This is the ans - 0 stands for valid move
+	if (_taken != true || _side[0] != dst[4]) // 2 stands for if the source tile has a piece that is the current side's turn so the user will only play on his turn
 	{
 		ans = '2';
 	}
 	else if (arr[int('8' - dst[3])][int(dst[2] - 'a')]->getTaken() && this != arr[int('8' - dst[3])][int(dst[2] - 'a')] && _side[0] == arr[int('8' - dst[3])][int(dst[2] - 'a')]->getSide()[0])
 	{
-		ans = '3';
+		ans = '3'; // 3 stands for if the destination is taken and has a piece from the opposite side
 	}
 	else if ((dst[1] > '8' || dst[1] < '0') || (dst[3] > '8' || dst[3] < '0') || (dst[0] > 'h' || dst[0] < 'a') || (dst[2] > 'h' || dst[2] < 'a'))
 	{
