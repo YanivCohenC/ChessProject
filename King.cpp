@@ -1,9 +1,14 @@
 #include "King.h"
 
+/*
+
+*/
 King::King(bool taken, string location, string type, string side) : Pieces(taken, location, type, side)
 {
 
 }
+
+
 
 char King::move(Pieces* arr[8][8], string dst)
 {
@@ -44,6 +49,7 @@ bool King::squareCheck(Pieces* arr[8][8], string dst)
 	bool ans = true;
 	int x = ('8' - dst[3]), y = (dst[2] - 'a');
 
+	// THIS WORKS WELL
 	if (dst[0] == dst[2] && (dst[1] + 1 == dst[3] || dst[1] - 1 == dst[3])) // Up or down check
 	{
 		if (!(arr[x][y]->getTaken()) || (arr[x][y]->getTaken() && arr[x][y]->getSide()[0] != dst[4]))
@@ -52,6 +58,7 @@ bool King::squareCheck(Pieces* arr[8][8], string dst)
 		}
 	}
 
+	// THIS WORKS WELL
 	else if (dst[1] == dst[3] && (dst[0] + 1 == dst[2] || dst[0] - 1 == dst[2])) // Left or right check
 	{
 		char ch = arr[x][y]->getSide()[0];
@@ -61,6 +68,7 @@ bool King::squareCheck(Pieces* arr[8][8], string dst)
 		}
 	}
 
+	// THIS NEEDS FIXING
 	else if ((dst[0] == dst[2] + 1 && dst[1] == dst[3] + 1) || (dst[1] == dst[3] - 1 && dst[2] == dst[0] - 1)) // Upper right or lower left check
 	{
 		if (!(arr[x][y]->getTaken()) || (arr[x][y]->getTaken() && arr[x][y]->getSide()[0] != dst[4]))
@@ -69,6 +77,7 @@ bool King::squareCheck(Pieces* arr[8][8], string dst)
 		}
 	}
 
+	// THIS NEEDS FIXING
 	else if ((dst[0] == dst[2] - 1 && dst[1] == dst[3] - 1) || (dst[1] == dst[3] + 1 && dst[2] == dst[0] + 1)) // Upper left or lower right check
 	{
 		if (!(arr[x][y]->getTaken()) || (arr[x][y]->getTaken() && arr[x][y]->getSide()[0] != dst[4]))
@@ -81,6 +90,13 @@ bool King::squareCheck(Pieces* arr[8][8], string dst)
 }
 
 
+/*Cheking if the king is threatened by any piece
+input:
+Pieces* arr[8][8], string dst
+output:
+false if the king is not threatend 
+true if he is
+*/
 bool King::check(Pieces* arr[8][8], string dst)
 {
 	bool ans = false;
@@ -92,6 +108,13 @@ bool King::check(Pieces* arr[8][8], string dst)
 }
 
 
+/*checking if the king is threatened by an enemy rook or queen
+input:
+Pieces* arr[8][8], string dst
+output:
+false if there is no rook or queen that threatened on the king
+true if rook or queen is theatenining the king
+*/
 bool King::rookCheck(Pieces* arr[8][8], string dst)
 {
 	bool ans = false;
@@ -104,6 +127,13 @@ bool King::rookCheck(Pieces* arr[8][8], string dst)
 }
 
 
+/*checking if the king is threatened by an enemy bishop or queen
+input:
+Pieces* arr[8][8], string dst
+output:
+false if there is no bishop or queen that threatened on the king
+true if bishop or queen is theatenining the king
+*/
 bool King::bishopCheck(Pieces* arr[8][8], string dst)
 {
 	int x = int('8' - dst[3]), y = int(dst[2] - 'a');
@@ -116,6 +146,13 @@ bool King::bishopCheck(Pieces* arr[8][8], string dst)
 }
 
 
+/*checking if the king is threatened by an enemy knight
+input:
+Pieces* arr[8][8], string dst
+output:
+false if there is no knight that threatened on the king
+true if knight is theatenining the king
+*/
 bool King::knightCheck(Pieces* arr[8][8], string dst)
 {
 	int x = int(dst[2] - 'a'), y = int('8' - dst[3]);
@@ -191,52 +228,73 @@ bool King::knightCheck(Pieces* arr[8][8], string dst)
 }
 
 
+/*checking if the king is threatened by an enemy pawn
+input:
+Pieces* arr[8][8], string dst
+output:
+false if there is no rook or queen that threatened on the king
+true if pawn is theatenining the king
+*/
 bool King::pawnCheck(Pieces* arr[8][8], string dst)
 {
 	int x = int('8' - dst[3]), y = int(dst[2] - 'a');
 	bool ans = false;
+	//checking for black pawn
 	if (dst[4] == 'B')
 	{
+		//checking if the piece not in one of the sides of the board
 		if (y - 1 >= 0 && y + 1 < 8 && x + 1 < 8)
 		{
+			//checking the left up and right up of the currect piece for enemy pawn
 			if (arr[x + 1][y + 1]->getType()[0] == 'p' && arr[x + 1][y + 1]->getSide()[0] == 'W' || arr[x + 1][y - 1]->getType()[0] == 'p' && arr[x + 1][y - 1]->getSide()[0] == 'W')
 			{
 				ans = true;
 			}
 		}
+		//checking if the enemy pawn in the left side of the board
 		else if (y - 1 < 0 && y + 1 < 8 && x + 1 < 8)
 		{
+			//checking the right up of the currect piece for enemy pawn
 			if (arr[x + 1][y + 1]->getType()[0] == 'p' && arr[x + 1][y + 1]->getSide()[0] == 'W')
 			{
 				ans = true;
 			}
 		}
+		//checking if the enemy pawn in the right side of the board
 		else if (y - 1 >= 0 && y + 1 > 8 && x + 1 < 8)
 		{
+			//checking the left up of the currect piece for enemy pawn
 			if (arr[x + 1][y - 1]->getType()[0] == 'p' && arr[x + 1][y - 1]->getSide()[0] == 'W')
 			{
 				ans = true;
 			}
 		}
 	}
+	//checking for the white pawn
 	else
 	{
+		//checking if the piece not in one of the sides of the board
 		if (y - 1 >= 0 && y + 1 < 8 && x - 1 >= 0)
 		{
+			//checking the left up and right up of the currect piece for enemy pawn
 			if ((arr[x - 1][y + 1]->getType()[0] == 'p' && arr[x - 1][y + 1]->getSide()[0] == 'B') || (arr[x - 1][y - 1]->getType()[0] == 'p' && arr[x - 1][y - 1]->getSide()[0] == 'B'))
 			{
 				ans = true;
 			}
 		}
+		//checking if the enemy pawn in the left side of the board
 		else if (y - 1 < 0 && y + 1 < 8 && x - 1 >= 8)
 		{
+			//checking the right up of the currect piece for enemy pawn
 			if (arr[x - 1][y + 1]->getType()[0] == 'p' && arr[x - 1][y + 1]->getSide()[0] == 'B')
 			{
 				ans = true;
 			}
 		}
+		//checking if the enemy pawn in the right side of the board
 		else if (y - 1 >= 0 && y + 1 > 8 && x - 1 >= 8)
 		{
+			//checking the left up of the currect piece for enemy pawn
 			if (arr[x - 1][y - 1]->getType()[0] == 'p' && arr[x - 1][y - 1]->getSide()[0] == 'B')
 			{
 				ans = true;
@@ -247,6 +305,13 @@ bool King::pawnCheck(Pieces* arr[8][8], string dst)
 }
 
 
+/*Function that check all the up left slant of the currect piece for an enemy bishop ,queen or king
+input:
+Pieces* arr[8][8], string dst, int startX, int startY, int dstY
+output:
+true if there is an enemy bishop ,queen or king in the slant
+false if there is no an enemy bishop ,queen or king in the slant
+*/
 bool King::upLeft(Pieces* arr[8][8], string dst, int startX, int startY, int dstY)
 {
 	bool ans = false;
@@ -254,20 +319,25 @@ bool King::upLeft(Pieces* arr[8][8], string dst, int startX, int startY, int dst
 
 	for (int i = startX - 1, j = startY - 1; j >= dstY && i >= 0; i--, j--)
 	{
+		//checking if there is something in the square
 		if (arr[i][j]->getTaken() && this != arr[i][j])
 		{
+			//checking if its an enemy piece
 			if( arr[i][j]->getSide()[0] != 'n' && arr[i][j]->getSide()[0] != dst[4])
 			{
+				//checking if its bishop, king or queen
 				if (arr[i][j]->getType()[0] == 'b' || arr[i][j]->getType()[0] == 'q' || (arr[i][j]->getType()[0] == 'K' && i == startX - 1 && startY - 1 == j))
 				{
 					ans = true;
 					break;
 				}
+				//if its something else so there is no need to continue to check the slant for enemy bishop, king or queen
 				else
 				{
 					break;
 				}
 			}
+			//if there is a friend piece in the slant there is no need to continue to check
 			else if (arr[i][j]->getSide()[0] == dst[4])
 			{
 				break;
@@ -278,6 +348,13 @@ bool King::upLeft(Pieces* arr[8][8], string dst, int startX, int startY, int dst
 }
 
 
+/*Function that check all the up right slant of the currect piece for an enemy bishop ,queen or king
+input:
+Pieces* arr[8][8], string dst, int startX, int startY, int dstY
+output:
+true if there is an enemy bishop ,queen or king in the slant
+false if there is no an enemy bishop ,queen or king in the slant
+*/
 bool King::upRight(Pieces* arr[8][8], string dst, int startX, int startY, int dstY)
 {
 	bool ans = false;
@@ -285,20 +362,25 @@ bool King::upRight(Pieces* arr[8][8], string dst, int startX, int startY, int ds
 
 	for (int i = startX - 1, j = startY + 1; j <= dstY && i >= 0; i--, j++)
 	{
+		//checking if there is something in the square
 		if (arr[i][j]->getTaken() && this != arr[i][j])
 		{
+			//checking if its an enemy piece
 			if (arr[i][j]->getSide()[0] != 'n' && arr[i][j]->getSide()[0] != dst[4])
 			{
+				//checking if its bishop, king or queen
 				if (arr[i][j]->getType()[0] == 'b' || arr[i][j]->getType()[0] == 'q' || (arr[i][j]->getType()[0] == 'K' && i == startX-1 && startY+1 == j))
 				{
 					ans = true;
 					break;
 				}
+				//if its something else so there is no need to continue to check the slant for enemy bishop, king or queen
 				else
 				{
 					break;
 				}
 			}
+			//if there is a friend piece in the slant there is no need to continue to check
 			else if (arr[i][j]->getSide()[0] == dst[4])
 			{
 				break;
@@ -309,6 +391,13 @@ bool King::upRight(Pieces* arr[8][8], string dst, int startX, int startY, int ds
 }
 
 
+/*Function that check all the down left slant of the currect piece for an enemy bishop ,queen or king
+input:
+Pieces* arr[8][8], string dst, int startX, int startY, int dstY
+output:
+true if there is an enemy bishop ,queen or king in the slant
+false if there is no an enemy bishop ,queen or king in the slant
+*/
 bool King::downLeft(Pieces* arr[8][8], string dst, int startX, int startY, int dstY)
 {
 	bool ans = false;
@@ -316,20 +405,25 @@ bool King::downLeft(Pieces* arr[8][8], string dst, int startX, int startY, int d
 
 	for (int i = startX + 1, j = startY - 1; j >= dstY && i < 8; i++, j--)
 	{
+		//checking if there is something in the square
 		if (arr[i][j]->getTaken() && this != arr[i][j])
 		{
+			//checking if its an enemy piece
 			if ( arr[i][j]->getSide()[0] != 'n' && arr[i][j]->getSide()[0] != dst[4])
 			{
+				//checking if its bishop, king or queen
 				if (arr[i][j]->getType()[0] == 'b' || arr[i][j]->getType()[0] == 'q' || (arr[i][j]->getType()[0] == 'K' && i == startX + 1 && startY - 1 == j))
 				{
 					ans = true;
 					break;
 				}
+				//if its something else so there is no need to continue to check the slant for enemy bishop, king or queen
 				else
 				{
 					break;
 				}
 			}
+			//if there is a friend piece in the slant there is no need to continue to check
 			else if (arr[i][j]->getSide()[0] == dst[4])
 			{
 				break;
@@ -340,6 +434,13 @@ bool King::downLeft(Pieces* arr[8][8], string dst, int startX, int startY, int d
 }
 
 
+/*Function that check all the down right slant of the currect piece for an enemy bishop ,queen or king
+input:
+Pieces* arr[8][8], string dst, int startX, int startY, int dstY
+output:
+true if there is an enemy bishop ,queen or king in the slant
+false if there is no an enemy bishop ,queen or king in the slant
+*/
 bool King::downRight(Pieces* arr[8][8], string dst, int startX, int startY, int dstY)
 {
 	bool ans = false;
@@ -347,20 +448,25 @@ bool King::downRight(Pieces* arr[8][8], string dst, int startX, int startY, int 
 
 	for (int i = startX + 1, j = startY + 1; j <= dstY && i < 8; i++, j++)
 	{
+		//checking if there is something in the square
 		if (arr[i][j]->getTaken() && this != arr[i][j])
 		{
+			//checking if its an enemy piece
 			if (arr[i][j]->getSide()[0] != 'n' && arr[i][j]->getSide()[0] != dst[4])
 			{
+				//checking if its bishop, king or queen
 				if (arr[i][j]->getType()[0] == 'b' || arr[i][j]->getType()[0] == 'q' || (arr[i][j]->getType()[0] == 'K' && i == startX + 1 && startY + 1 == j))
 				{
 					ans = true;
 					break;
 				}
+				//if its something else so there is no need to continue to check the slant for enemy bishop, king or queen
 				else
 				{
 					break;
 				}
 			}
+			//if there is a friend piece in the slant there is no need to continue to check
 			else if (arr[i][j]->getSide()[0] == dst[4])
 			{
 				break;
@@ -372,7 +478,13 @@ bool King::downRight(Pieces* arr[8][8], string dst, int startX, int startY, int 
 
 
 
-
+/*function that check the left line for an enemy rook, king or queen
+input:
+Pieces* arr[8][8], string dst, int startY, int dstY, int X
+output:
+true if there is an enemy rook, king or queen in the line
+false if there is no an enemy rook, king or queen in the line
+*/
 bool King::left(Pieces* arr[8][8], string dst, int startY, int dstY, int X)
 {
 	bool ans = false;
@@ -380,20 +492,25 @@ bool King::left(Pieces* arr[8][8], string dst, int startY, int dstY, int X)
 
 	for (int i = startY - 1; i >= dstY; i--)
 	{
-		if (arr[X][i]->getTaken() && this != arr[X][i])
+		//checkng if there is piece is the square
+		if (arr[X][i]->getTaken() && this != arr[X][i]/*<< to check if that is not the piece that move now*/)
 		{
+			//checking if its an enemy piece
 			if (arr[X][i]->getSide()[0] != 'n' && arr[X][i]->getSide()[0] != dst[4])
 			{
+				//checking if its an enemy rook,king or queen
 				if (arr[X][i]->getType()[0] == 'r' || arr[X][i]->getType()[0] == 'q' || (arr[X][i]->getType()[0] == 'K' && i == startY - 1))
 				{
 					ans = true;
 					break;
 				}
+				//if its something else so there is no need to continue to check the line for enemy rook,king or queen
 				else
 				{
 					break;
 				}
 			}
+			//if there is a friend piece in the line there is no need to continue to check
 			else if (arr[X][i]->getSide()[0] == dst[4])
 			{
 				break;
@@ -405,6 +522,13 @@ bool King::left(Pieces* arr[8][8], string dst, int startY, int dstY, int X)
 }
 
 
+/*function that check the left line for an enemy rook, king or queen
+input:
+Pieces* arr[8][8], string dst, int startY, int dstY, int X
+output:
+true if there is an enemy rook, king or queen in the line
+false if there is no an enemy rook, king or queen in the line
+*/
 bool King::right(Pieces* arr[8][8], string dst, int startY, int dstY, int X)
 {
 	bool ans = false;
@@ -412,20 +536,25 @@ bool King::right(Pieces* arr[8][8], string dst, int startY, int dstY, int X)
 
 	for (int i = startY + 1; i <= dstY; i++)
 	{
+		//checkng if there is piece is the square
 		if (arr[X][i]->getTaken() && this != arr[X][i])
 		{
+			//checking if its an enemy piece
 			if (arr[X][i]->getSide()[0] != 'n' && arr[X][i]->getSide()[0] != dst[4])
 			{
+				//checking if its an enemy rook,king or queen
 				if (arr[X][i]->getType()[0] == 'r' || arr[X][i]->getType()[0] == 'q' || (arr[X][i]->getType()[0] == 'K' && i == startY + 1))
 				{
 					ans = true;
 					break;
 				}
+				//if its something else so there is no need to continue to check the line for enemy rook,king or queen
 				else
 				{
 					break;
 				}
 			}
+			//if there is a friend piece in the line there is no need to continue to check
 			else if (arr[X][i]->getSide()[0] == dst[4])
 			{
 				break;
@@ -437,6 +566,13 @@ bool King::right(Pieces* arr[8][8], string dst, int startY, int dstY, int X)
 }
 
 
+/*function that check the up row for an enemy rook, king or queen
+input:
+Pieces* arr[8][8], string dst, int startY, int dstY, int X
+output:
+true if there is an enemy rook, king or queen in the row
+false if there is no an enemy rook, king or queen in the row
+*/
 bool King::up(Pieces* arr[8][8], string dst, int startX, int dstX, int Y)
 {
 	bool ans = false;
@@ -444,20 +580,25 @@ bool King::up(Pieces* arr[8][8], string dst, int startX, int dstX, int Y)
 
 	for (int i = startX - 1; i >= dstX; i--)
 	{
+		//checkng if there is piece is the square
 		if (arr[i][Y]->getTaken() && this != arr[i][Y])
 		{
+			//checking if its an enemy piece
 			if (arr[i][Y]->getSide()[0] != 'n' && arr[i][Y]->getSide()[0] != dst[4])
 			{
+				//checking if its an enemy rook,king or queen
 				if (arr[i][Y]->getType()[0] == 'r' || arr[i][Y]->getType()[0] == 'q' || (arr[i][Y]->getType()[0] == 'K' && i == startX - 1))
 				{
 					ans = true;
 					break;
 				}
+				//if its something else so there is no need to continue to check the row for enemy rook,king or queen
 				else
 				{
 					break;
 				}
 			}
+			//if there is a friend piece in the row there is no need to continue to check
 			else if (arr[i][Y]->getSide()[0] == dst[4])
 			{
 				break;
@@ -468,6 +609,13 @@ bool King::up(Pieces* arr[8][8], string dst, int startX, int dstX, int Y)
 }
 
 
+/*function that check the down row for an enemy rook, king or queen
+input:
+Pieces* arr[8][8], string dst, int startY, int dstY, int X
+output:
+true if there is an enemy rook, king or queen in the row
+false if there is no an enemy rook, king or queen in the row
+*/
 bool  King::down(Pieces* arr[8][8], string dst, int startX, int dstX, int Y)
 {
 	bool ans = false;
@@ -475,20 +623,25 @@ bool  King::down(Pieces* arr[8][8], string dst, int startX, int dstX, int Y)
 
 	for (int i = startX + 1; i <= dstX; i++)
 	{
+		//checkng if there is piece is the square
 		if (arr[i][Y]->getTaken() && this != arr[i][Y])
 		{
+			//checking if its an enemy piece
 			if (arr[i][Y]->getSide()[0] != 'n' && arr[i][Y]->getSide()[0] != dst[4])
 			{
+				//checking if its an enemy rook,king or queen
 				if (arr[i][Y]->getType()[0] == 'r' || arr[i][Y]->getType()[0] == 'q' || (arr[i][Y]->getType()[0] == 'K' && i == startX + 1))
 				{
 					ans = true;
 					break;
 				}
+				//if its something else so there is no need to continue to check the row for enemy rook,king or queen
 				else
 				{
 					break;
 				}
 			}
+			//if there is a friend piece in the row there is no need to continue to check
 			else if (arr[i][Y]->getSide()[0] == dst[4])
 			{
 				break;
